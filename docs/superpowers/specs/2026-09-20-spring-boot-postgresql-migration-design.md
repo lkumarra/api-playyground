@@ -9,7 +9,7 @@ Create a standalone Java Spring Boot replacement for the legacy Node/Feathers AP
 The replacement exposes the following legacy routes at the root path:
 
 * `GET`, `POST` `/products`, `/categories`, `/stores`, and `/services`
-* `GET`, `PATCH`, `DELETE` `/products/{id}`, `/categories/{id}`, `/stores/{id}`, and `/services/{id}`
+* `GET`, `PUT`, `PATCH`, `DELETE` `/products/{id}`, `/categories/{id}`, `/stores/{id}`, and `/services/{id}`
 * `GET /version` and `GET /healthcheck`
 
 The Spring application preserves legacy collection responses:
@@ -33,6 +33,8 @@ It accepts the Feathers-compatible query syntax used by the current API:
 * product category filters: `category.name`, `category[name]`, `category.id`, `category[id]`
 * store service filters: `service.name`, `service[name]`, `service.id`, `service[id]`
 * nearby-store lookup: `near=<ZIP>` plus optional `miles=<radius>`
+
+For unprojected resource reads, representations retain the legacy relationship shape: products include `categories` without join attributes; stores include `services` with the legacy `storeservices` join metadata; categories include shallow `subCategories` and `categoryPath` values without recursively embedding parent collections. A `$select[]` projection suppresses those relationships. Collection projections contain exactly the requested fields; item projections retain the primary key, as the legacy Sequelize implementation does.
 
 The project also serves the existing public and Markdown documentation assets and exposes OpenAPI/Swagger documentation at the existing documentation-facing routes where Springdoc supports them. The API version remains `1.1.0` unless deliberately changed in the new project metadata.
 
