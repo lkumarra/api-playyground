@@ -1,0 +1,1029 @@
+{
+  "info": {
+    "name": "Best Buy API Playground",
+    "description": "Complete Postman collection for the Best Buy API Playground (Spring Boot).\n\nA RESTful API training tool with 51,000+ products, 1,500+ stores, and 4,300+ categories.\n\n## Base URL\n`http://localhost:3030`\n\n## Pagination\nAll list endpoints support `$limit` (default 10, max 25) and `$skip` (default 0).\n\n## Filtering\n- Products: filter by `category.id` or `category.name`\n- Stores: filter by `service.id`, `service.name`, or geolocation (`near` + `miles`)\n\n## Read-only Mode\nWhen `app.readonly=true`, all write operations return 405.",
+    "_postman_id": "bestbuy-api-playground-spring-boot",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3030",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Products",
+      "description": "CRUD operations for products. Products have associations with categories.",
+      "item": [
+        {
+          "name": "List all products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Returns a paginated list of all products with their associated categories."
+          }
+        },
+        {
+          "name": "List products with pagination",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?$limit=5&$skip=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "$limit", "value": "5", "description": "Number of results (max 25)" },
+                { "key": "$skip", "value": "10", "description": "Number of results to skip" }
+              ]
+            },
+            "description": "Returns 5 products, skipping the first 10."
+          }
+        },
+        {
+          "name": "List products - max page size",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?$limit=25",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "$limit", "value": "25", "description": "Maximum allowed page size" }
+              ]
+            },
+            "description": "Returns the maximum allowed 25 products per page."
+          }
+        },
+        {
+          "name": "Filter products by category ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?category.id=abcat0101000",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "category.id", "value": "abcat0101000", "description": "Category ID (TV & Home Theater)" }
+              ]
+            },
+            "description": "Filter products by category ID using dot notation."
+          }
+        },
+        {
+          "name": "Filter products by category ID (bracket notation)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?category[id]=abcat0101000",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "category[id]", "value": "abcat0101000", "description": "Category ID using bracket notation" }
+              ]
+            },
+            "description": "Filter products by category ID using bracket notation."
+          }
+        },
+        {
+          "name": "Filter products by category name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?category.name=TVs",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "category.name", "value": "TVs", "description": "Category name" }
+              ]
+            },
+            "description": "Filter products by category name using dot notation."
+          }
+        },
+        {
+          "name": "Filter products by category name (bracket notation)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?category[name]=Coffee Pods",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "category[name]", "value": "Coffee Pods", "description": "Category name using bracket notation" }
+              ]
+            },
+            "description": "Filter products by category name using bracket notation."
+          }
+        },
+        {
+          "name": "Filter products by type",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?type=HardGood&$limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "type", "value": "HardGood", "description": "Product type" },
+                { "key": "$limit", "value": "5" }
+              ]
+            },
+            "description": "Filter products by type field."
+          }
+        },
+        {
+          "name": "Filter products by manufacturer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?manufacturer=Apple&$limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "manufacturer", "value": "Apple" },
+                { "key": "$limit", "value": "5" }
+              ]
+            },
+            "description": "Filter products by manufacturer."
+          }
+        },
+        {
+          "name": "Filter products by price",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?price=99.99&$limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "price", "value": "99.99" },
+                { "key": "$limit", "value": "5" }
+              ]
+            },
+            "description": "Filter products by exact price."
+          }
+        },
+        {
+          "name": "Get product by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/127687",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "127687"]
+            },
+            "description": "Returns a single product with its associated categories."
+          }
+        },
+        {
+          "name": "Get product by ID - Not Found",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/99999999",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "99999999"]
+            },
+            "description": "Returns 404 when product does not exist."
+          }
+        },
+        {
+          "name": "Create a product",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Product\",\n  \"type\": \"Electronics\",\n  \"upc\": \"123456789012\",\n  \"price\": 99.99,\n  \"shipping\": 5.99,\n  \"description\": \"A test product created via Postman\",\n  \"manufacturer\": \"Test Manufacturer\",\n  \"model\": \"TEST-001\",\n  \"url\": \"http://example.com/test-product\",\n  \"image\": \"http://example.com/test-product.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Creates a new product. Required fields: name, type, upc, description, model."
+          }
+        },
+        {
+          "name": "Create a product - minimal fields",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Minimal Product\",\n  \"type\": \"Software\",\n  \"upc\": \"999888777\",\n  \"description\": \"Only required fields\",\n  \"model\": \"MIN-001\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Creates a product with only the required fields."
+          }
+        },
+        {
+          "name": "Create a product - validation error",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 49.99\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Attempts to create a product without required fields. Returns 400 with validation errors."
+          }
+        },
+        {
+          "name": "Update a product (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 79.99,\n  \"name\": \"Updated Product Name\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/127687",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "127687"]
+            },
+            "description": "Partially updates a product. Only the provided fields are changed."
+          }
+        },
+        {
+          "name": "Update a product - single field",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shipping\": 0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/127687",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "127687"]
+            },
+            "description": "Updates only the shipping field of a product."
+          }
+        },
+        {
+          "name": "Delete a product",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/127687",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "127687"]
+            },
+            "description": "Deletes a product and returns the deleted object."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stores",
+      "description": "CRUD operations for stores. Stores have associations with in-store services and support geolocation search.",
+      "item": [
+        {
+          "name": "List all stores",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores"]
+            },
+            "description": "Returns a paginated list of all stores with their associated services."
+          }
+        },
+        {
+          "name": "List stores with pagination",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores?$limit=5&$skip=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores"],
+              "query": [
+                { "key": "$limit", "value": "5" },
+                { "key": "$skip", "value": "20" }
+              ]
+            },
+            "description": "Returns 5 stores, skipping the first 20."
+          }
+        },
+        {
+          "name": "Find stores near zip code (default 10 miles)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores?near=55401",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores"],
+              "query": [
+                { "key": "near", "value": "55401", "description": "US zip code (Minneapolis)" }
+              ]
+            },
+            "description": "Finds stores within the default 10-mile radius of zip code 55401 (Minneapolis)."
+          }
+        },
+        {
+          "name": "Find stores near zip code (custom radius)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores?near=55401&miles=25",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores"],
+              "query": [
+                { "key": "near", "value": "55401", "description": "US zip code" },
+                { "key": "miles", "value": "25", "description": "Radius in miles" }
+              ]
+            },
+            "description": "Finds stores within 25 miles of zip code 55401."
+          }
+        },
+        {
+          "name": "Find stores near zip code (small radius)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores?near=10001&miles=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores"],
+              "query": [
+                { "key": "near", "value": "10001", "description": "New York City zip" },
+                { "key": "miles", "value": "5" }
+              ]
+            },
+            "description": "Finds stores within 5 miles of Manhattan (10001)."
+          }
+        },
+        {
+          "name": "Find stores near zip code (Los Angeles)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores?near=90210&miles=15",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores"],
+              "query": [
+                { "key": "near", "value": "90210", "description": "Beverly Hills zip" },
+                { "key": "miles", "value": "15" }
+              ]
+            },
+            "description": "Finds stores within 15 miles of Beverly Hills (90210)."
+          }
+        },
+        {
+          "name": "Filter stores by service ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores?service.id=4&$limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores"],
+              "query": [
+                { "key": "service.id", "value": "4", "description": "Service ID" },
+                { "key": "$limit", "value": "5" }
+              ]
+            },
+            "description": "Filter stores by service ID using dot notation."
+          }
+        },
+        {
+          "name": "Filter stores by service ID (bracket notation)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores?service[id]=4&$limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores"],
+              "query": [
+                { "key": "service[id]", "value": "4" },
+                { "key": "$limit", "value": "5" }
+              ]
+            },
+            "description": "Filter stores by service ID using bracket notation."
+          }
+        },
+        {
+          "name": "Filter stores by service name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores?service.name=Geek Squad Services&$limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores"],
+              "query": [
+                { "key": "service.name", "value": "Geek Squad Services" },
+                { "key": "$limit", "value": "5" }
+              ]
+            },
+            "description": "Filter stores by service name."
+          }
+        },
+        {
+          "name": "Filter stores by service name (bracket notation)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores?service[name]=Best Buy Mobile&$limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores"],
+              "query": [
+                { "key": "service[name]", "value": "Best Buy Mobile" },
+                { "key": "$limit", "value": "5" }
+              ]
+            },
+            "description": "Filter stores by service name using bracket notation."
+          }
+        },
+        {
+          "name": "Filter stores by city",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores?city=Minneapolis",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores"],
+              "query": [
+                { "key": "city", "value": "Minneapolis" }
+              ]
+            },
+            "description": "Filter stores by city name."
+          }
+        },
+        {
+          "name": "Filter stores by state",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores?state=MN&$limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores"],
+              "query": [
+                { "key": "state", "value": "MN" },
+                { "key": "$limit", "value": "5" }
+              ]
+            },
+            "description": "Filter stores by state."
+          }
+        },
+        {
+          "name": "Filter stores by zip",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores?zip=55305",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores"],
+              "query": [
+                { "key": "zip", "value": "55305" }
+              ]
+            },
+            "description": "Filter stores by zip code."
+          }
+        },
+        {
+          "name": "Get store by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores/4",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores", "4"]
+            },
+            "description": "Returns a single store with its associated services."
+          }
+        },
+        {
+          "name": "Get store by ID - Not Found",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores/99999",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores", "99999"]
+            },
+            "description": "Returns 404 when store does not exist."
+          }
+        },
+        {
+          "name": "Create a store",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Store\",\n  \"type\": \"BigBox\",\n  \"address\": \"123 Main Street\",\n  \"address2\": \"Suite 100\",\n  \"city\": \"Minneapolis\",\n  \"state\": \"MN\",\n  \"zip\": \"55401\",\n  \"lat\": 44.9778,\n  \"lng\": -93.2650,\n  \"hours\": \"Mon-Sat: 10-9; Sun: 10-6\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/stores",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores"]
+            },
+            "description": "Creates a new store. Required fields: name, address, city, state, zip."
+          }
+        },
+        {
+          "name": "Create a store - minimal fields",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Minimal Store\",\n  \"address\": \"456 Oak Ave\",\n  \"city\": \"St Paul\",\n  \"state\": \"MN\",\n  \"zip\": \"55101\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/stores",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores"]
+            },
+            "description": "Creates a store with only the required fields."
+          }
+        },
+        {
+          "name": "Create a store - validation error",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Missing Required Fields\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/stores",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores"]
+            },
+            "description": "Attempts to create a store without required fields. Returns 400."
+          }
+        },
+        {
+          "name": "Update a store (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hours\": \"Mon-Sat: 9-10; Sun: 10-7\",\n  \"name\": \"Updated Store Name\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/stores/4",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores", "4"]
+            },
+            "description": "Partially updates a store."
+          }
+        },
+        {
+          "name": "Update a store - single field",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address2\": \"Floor 2\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/stores/4",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores", "4"]
+            },
+            "description": "Updates only the address2 field."
+          }
+        },
+        {
+          "name": "Delete a store",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores/4",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores", "4"]
+            },
+            "description": "Deletes a store and returns the deleted object."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "description": "CRUD operations for categories. Categories have self-referential relationships for subcategories and category paths.",
+      "item": [
+        {
+          "name": "List all categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"]
+            },
+            "description": "Returns a paginated list of categories with subcategories and category paths."
+          }
+        },
+        {
+          "name": "List categories with pagination",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories?$limit=5&$skip=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"],
+              "query": [
+                { "key": "$limit", "value": "5" },
+                { "key": "$skip", "value": "10" }
+              ]
+            },
+            "description": "Returns 5 categories, skipping the first 10."
+          }
+        },
+        {
+          "name": "Get category by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories/abcat0010000",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "abcat0010000"]
+            },
+            "description": "Returns a single category with its subcategories and category path."
+          }
+        },
+        {
+          "name": "Get category by ID - TV & Home Theater",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories/abcat0101000",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "abcat0101000"]
+            },
+            "description": "Returns the TV & Home Theater category."
+          }
+        },
+        {
+          "name": "Get category by ID - Not Found",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories/nonexistent-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "nonexistent-id"]
+            },
+            "description": "Returns 404 when category does not exist."
+          }
+        },
+        {
+          "name": "Create a category",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"custom-cat-001\",\n  \"name\": \"Custom Test Category\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"]
+            },
+            "description": "Creates a new category. Both id and name are required."
+          }
+        },
+        {
+          "name": "Create a category - validation error",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Missing ID Field\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"]
+            },
+            "description": "Attempts to create a category without the required 'id' field. Returns 400."
+          }
+        },
+        {
+          "name": "Update a category (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Category Name\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categories/abcat0010000",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "abcat0010000"]
+            },
+            "description": "Partially updates a category name."
+          }
+        },
+        {
+          "name": "Delete a category",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories/custom-cat-001",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "custom-cat-001"]
+            },
+            "description": "Deletes a category and returns the deleted object."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Services",
+      "description": "CRUD operations for in-store services (e.g., Geek Squad, Best Buy Mobile).",
+      "item": [
+        {
+          "name": "List all services",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/services",
+              "host": ["{{baseUrl}}"],
+              "path": ["services"]
+            },
+            "description": "Returns a paginated list of all in-store services."
+          }
+        },
+        {
+          "name": "List all services (show all)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/services?$limit=25",
+              "host": ["{{baseUrl}}"],
+              "path": ["services"],
+              "query": [
+                { "key": "$limit", "value": "25", "description": "Show all 21 services" }
+              ]
+            },
+            "description": "Returns all services (there are 21 total)."
+          }
+        },
+        {
+          "name": "List services with pagination",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/services?$limit=5&$skip=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["services"],
+              "query": [
+                { "key": "$limit", "value": "5" },
+                { "key": "$skip", "value": "5" }
+              ]
+            },
+            "description": "Returns 5 services, skipping the first 5."
+          }
+        },
+        {
+          "name": "Get service by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/services/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["services", "1"]
+            },
+            "description": "Returns a single in-store service (Geek Squad Services)."
+          }
+        },
+        {
+          "name": "Get service by ID - Not Found",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/services/99999",
+              "host": ["{{baseUrl}}"],
+              "path": ["services", "99999"]
+            },
+            "description": "Returns 404 when service does not exist."
+          }
+        },
+        {
+          "name": "Create a service",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Test Service\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/services",
+              "host": ["{{baseUrl}}"],
+              "path": ["services"]
+            },
+            "description": "Creates a new in-store service. Only 'name' is required."
+          }
+        },
+        {
+          "name": "Create a service - validation error (empty body)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/services",
+              "host": ["{{baseUrl}}"],
+              "path": ["services"]
+            },
+            "description": "Attempts to create a service without the required 'name' field. Returns 400."
+          }
+        },
+        {
+          "name": "Create a service - validation error (blank name)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/services",
+              "host": ["{{baseUrl}}"],
+              "path": ["services"]
+            },
+            "description": "Attempts to create a service with a blank name. Returns 400."
+          }
+        },
+        {
+          "name": "Update a service (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Service Name\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/services/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["services", "1"]
+            },
+            "description": "Updates the name of an existing service."
+          }
+        },
+        {
+          "name": "Delete a service",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/services/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["services", "1"]
+            },
+            "description": "Deletes a service and returns the deleted object."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Utilities",
+      "description": "Health check and version endpoints.",
+      "item": [
+        {
+          "name": "Get API version",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/version",
+              "host": ["{{baseUrl}}"],
+              "path": ["version"]
+            },
+            "description": "Returns the current API version."
+          }
+        },
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/healthcheck",
+              "host": ["{{baseUrl}}"],
+              "path": ["healthcheck"]
+            },
+            "description": "Returns uptime (seconds), read-only mode status, and document counts for products, stores, and categories."
+          }
+        },
+        {
+          "name": "OpenAPI JSON spec",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/swagger.json",
+              "host": ["{{baseUrl}}"],
+              "path": ["swagger.json"]
+            },
+            "description": "Returns the full OpenAPI 3 specification in JSON format."
+          }
+        }
+      ]
+    }
+  ]
+}
